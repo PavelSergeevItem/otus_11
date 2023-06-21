@@ -64,8 +64,8 @@ README с описанием каждого решения (скриншоты �
            ├─9748 nginx: master process /usr/sbin/nginx...
            └─9750 nginx: worker process`
 
-5. Проверил статус параметра`getsebool -a | grep nis_enabled`
-6. Вернул запрет работы nginx на порту 4881 `setsebool -P nis_enabled off`
+6. Проверил статус параметра`getsebool -a | grep nis_enabled`
+7. Вернул запрет работы nginx на порту 4881 `setsebool -P nis_enabled off`
 
 Второй способ.  
 
