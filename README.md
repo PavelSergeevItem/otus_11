@@ -41,7 +41,7 @@ README с описанием каждого решения (скриншоты �
 	  Description:
 	  Allow nis to enabled
    
-	  `Allow access by executing:
+	  Allow access by executing:
 	  # setsebool -P nis_enabled 1`  
    
    Исходя из полученной информации сделал вывод, что нужно поменять параметр nis_enabled.  
