@@ -48,9 +48,9 @@ README с описанием каждого решения (скриншоты �
   
  4. Разрешил работу nginx на порту TCP 4881 с помощью переключателя setsebool.
     
-    `[root@selinux vagrant]# setsebool -P nis_enabled 1
-     [root@selinux vagrant]# systemctl restart nginx
-     [root@selinux vagrant]# systemctl status nginx
+    `[root@selinux vagrant]# setsebool -P nis_enabled 1`
+     `[root@selinux vagrant]# systemctl restart nginx`
+     `[root@selinux vagrant]# systemctl status nginx
      ● nginx.service - The nginx HTTP and reverse proxy server
      Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
      Active: active (running) since Ср 2023-06-21 07:22:30 UTC; 10s ago
