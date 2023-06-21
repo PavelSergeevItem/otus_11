@@ -112,14 +112,16 @@ semodule -i nginx.pp
 
 1. Установил ansible по иструкции https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html на хост машину.
 2. Установил git на хост машину. Выполнил клонирование репозитория. `git clone https://github.com/mbfx/otus-linux-adm.git`
-`[root@selinux ansible]# git clone https://github.com/mbfx/otus-linux-adm.git
+```
+[root@selinux ansible]# git clone https://github.com/mbfx/otus-linux-adm.git
 Cloning into 'otus-linux-adm'...
 remote: Enumerating objects: 558, done.
 remote: Counting objects: 100% (456/456), done.
 remote: Compressing objects: 100% (303/303), done.
 remote: Total 558 (delta 125), reused 396 (delta 74), pack-reused 102
 Receiving objects: 100% (558/558), 1.38 MiB | 1.76 MiB/s, done.
-Resolving deltas: 100% (140/140), done.`
+Resolving deltas: 100% (140/140), done.
+```
 3. Перешел в директорию `cd otus-linux-adm/selinux_dns_problems`
 4. Запустил виртуальные машины: `vagrant up`
 5. 
