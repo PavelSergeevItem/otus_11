@@ -27,8 +27,10 @@ README с описанием каждого решения (скриншоты �
 2. При запуске виртуальной машины убедился, что nginx не запустился.
 3. Подключился по ssh к виртуальной машине. Перешел в root, проверил, что файрвол отключен, проверил конфиг nginx, проверил режим работы SELinux.
 Нашел информацию в лог файле о блокировке порта.
-   `[root@selinux vagrant]# grep '4881' /var/log/audit/audit.log
-   type=AVC msg=audit(1687180205.055:1020): avc:  denied  { name_bind } for  pid=22243 comm="nginx" src=4881 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket permissive=0`
+
+`[root@selinux vagrant]# grep '4881' /var/log/audit/audit.log
+type=AVC msg=audit(1687180205.055:1020): avc:  denied  { name_bind } for  pid=22243 comm="nginx" src=4881 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket permissive=0`  
+
   
  5. Разрешил работу nginx на порту TCP 4881 с помощью переключателя setsebool.
 6. Проверил статус параметра`getsebool -a | grep nis_enabled`
