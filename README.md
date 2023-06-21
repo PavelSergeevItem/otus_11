@@ -28,12 +28,12 @@ README с описанием каждого решения (скриншоты �
 3. Подключился по ssh к виртуальной машине. Перешел в root, проверил, что файрвол отключен, проверил конфиг nginx, проверил режим работы SELinux.
 Нашел информацию в лог файле о блокировке порта.
 
-'[root@selinux vagrant]# grep '4881' /var/log/audit/audit.log
- type=AVC msg=audit(1687180205.055:1020): avc:  denied  { name_bind } for  pid=22243 comm="nginx" src=4881 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 class=tcp_socket permissive=0 '
+```[root@selinux vagrant]# grep '4881' /var/log/audit/audit.log
+ type=AVC msg=audit(1687180205.055:1020): avc:  denied  { name_bind } for  pid=22243 comm="nginx" src=4881 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 class=tcp_socket permissive=0```
 
  При помощи утилиты audit2why выяснил причину, почему порт блокируется.  
  
- '[root@selinux vagrant]# grep 1687180205.055:1020 /var/log/audit/audit.log | audit2why
+```[root@selinux vagrant]# grep 1687180205.055:1020 /var/log/audit/audit.log | audit2why
   type=AVC msg=audit(1687180205.055:1020): avc:  denied  { name_bind } for  pid=22243 comm="nginx" src=4881 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0      tclass=tcp_socket permissive=0
   
 	  Was caused by:
@@ -42,17 +42,17 @@ README с описанием каждого решения (скриншоты �
 	  Allow nis to enabled
    
 	  Allow access by executing:
-	  # setsebool -P nis_enabled 1'
+	  # setsebool -P nis_enabled 1```
    
    Исходя из полученной информации сделал вывод, что нужно поменять параметр nis_enabled.  
   
  4. Разрешил работу nginx на порту TCP 4881 с помощью переключателя setsebool.
 
-    '[root@selinux vagrant]# setsebool -P nis_enabled 1'
+   ```[root@selinux vagrant]# setsebool -P nis_enabled 1```
     
-    '[root@selinux vagrant]# systemctl restart nginx'
+   ```[root@selinux vagrant]# systemctl restart nginx```
     
-'[root@selinux vagrant]# systemctl status nginx  
+```[root@selinux vagrant]# systemctl status nginx  
 ● nginx.service - The nginx HTTP and reverse proxy server
    Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
    Active: active (running) since Ср 2023-06-21 07:22:30 UTC; 10s ago
@@ -62,24 +62,25 @@ README с описанием каждого решения (скриншоты �
  Main PID: 9748 (nginx)
    CGroup: /system.slice/nginx.service
            ├─9748 nginx: master process /usr/sbin/nginx...
-           └─9750 nginx: worker process'
+           └─9750 nginx: worker process```
 
-6. Проверил статус параметра`getsebool -a | grep nis_enabled`
-   `nis_enabled --> on`
+6. Проверил статус параметра ```getsebool -a | grep nis_enabled```
+  ```nis_enabled --> on```
 
-7. Вернул запрет работы nginx на порту 4881 `setsebool -P nis_enabled off`
+7. Вернул запрет работы nginx на порту 4881 ```setsebool -P nis_enabled off```
 
 Второй способ.  
 
 1. Нашел тип для http трафика
-`[root@selinux vagrant]# semanage port -l | grep http
+
+```[root@selinux vagrant]# semanage port -l | grep http
 http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
 http_cache_port_t              udp      3130
 http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
 pegasus_http_port_t            tcp      5988
-pegasus_https_port_t           tcp      5989
-`
-2. Добавил порт в тип http_port_t: `semanage port -a -t http_port_t -p tcp 4881`
+pegasus_https_port_t           tcp      5989```
+
+2. Добавил порт в тип http_port_t: ```semanage port -a -t http_port_t -p tcp 4881```
 3. Перезапустил службу nginx и проверим работу: `systemctl restart nginx`
 `systemctl status nginx`
 5. Удалил нестандартный порт из имеющегося типа с помощью команды: `semanage port -d -t http_port_t -p tcp 4881`
