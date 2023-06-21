@@ -77,14 +77,14 @@ type=AVC msg=audit(1687180205.055:1020): avc:  denied  { name_bind } for  pid=22
 Второй способ.  
 
 1. Нашел тип для http трафика
-
-    `[root@selinux vagrant]# semanage port -l | grep http
+```
+[root@selinux vagrant]# semanage port -l | grep http
 http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
 http_cache_port_t              udp      3130
 http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
 pegasus_http_port_t            tcp      5988
 pegasus_https_port_t           tcp      5989
-`
+```
 
 3. Добавил порт в тип http_port_t: `semanage port -a -t http_port_t -p tcp 4881`
 4. Перезапустил службу nginx и проверим работу: `systemctl restart nginx`
@@ -95,11 +95,13 @@ pegasus_https_port_t           tcp      5989
 
 1. Попробовал запустить nginx: `systemctl start nginx`
 2. Воспользовался утилитой audit2allow
-    `[root@selinux vagrant]# grep nginx /var/log/audit/audit.log | audit2allow -M nginx
+```
+[root@selinux vagrant]# grep nginx /var/log/audit/audit.log | audit2allow -M nginx
 ******************** IMPORTANT ***********************
 To make this policy package active, execute:
 
-semodule -i nginx.pp`
+semodule -i nginx.pp
+```
 
 3. `semodule -i nginx.pp`
 4. Запустил nginx `systemctl start nginx`
