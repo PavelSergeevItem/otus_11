@@ -53,23 +53,16 @@ README с описанием каждого решения (скриншоты �
     `[root@selinux vagrant]# systemctl restart nginx`
     
      `[root@selinux vagrant]# systemctl status nginx
-     ● nginx.service - The nginx HTTP and reverse proxy server
-     Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
-     Active: active (running) since Ср 2023-06-21 07:22:30 UTC; 10s ago
+    ● nginx.service - The nginx HTTP and reverse proxy server
+    Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
+    Active: active (running) since Ср 2023-06-21 07:22:30 UTC; 10s ago
     Process: 9746 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)
     Process: 9742 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)
     Process: 9741 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
     Main PID: 9748 (nginx)
     CGroup: /system.slice/nginx.service
            ├─9748 nginx: master process /usr/sbin/nginx...
-           └─9750 nginx: worker process
-
-июн 21 07:22:30 selinux systemd[1]: Stopped The ngin...
-июн 21 07:22:30 selinux systemd[1]: Starting The ngi...
-июн 21 07:22:30 selinux nginx[9742]: nginx: the conf...
-июн 21 07:22:30 selinux nginx[9742]: nginx: configur...
-июн 21 07:22:30 selinux systemd[1]: Started The ngin...
-Hint: Some lines were ellipsized, use -l to show in full.`
+           └─9750 nginx: worker process`
 
 5. Проверил статус параметра`getsebool -a | grep nis_enabled`
 6. Вернул запрет работы nginx на порту 4881 `setsebool -P nis_enabled off`
