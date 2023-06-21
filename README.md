@@ -34,8 +34,9 @@ README с описанием каждого решения (скриншоты �
  
  При помощи утилиты audit2why выяснил причину, почему порт блокируется.  
  
-`[root@selinux vagrant]# grep 1687180205.055:1020 /var/log/audit/audit.log | audit2why
-  type=AVC msg=audit(1687180205.055:1020): avc:  denied  { name_bind } for  pid=22243 comm="nginx" src=4881 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0      tclass=tcp_socket permissive=0
+```
+[root@selinux vagrant]# grep 1687180205.055:1020 /var/log/audit/audit.log | audit2why
+type=AVC msg=audit(1687180205.055:1020): avc:  denied  { name_bind } for  pid=22243 comm="nginx" src=4881 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0     tclass=tcp_socket permissive=0
   
 	  Was caused by:
 	  The boolean nis_enabled was set incorrectly. 
@@ -44,17 +45,18 @@ README с описанием каждого решения (скриншоты �
    
 	  Allow access by executing:
 	  # setsebool -P nis_enabled 1
-   `
+```
    
    Исходя из полученной информации сделал вывод, что нужно поменять параметр nis_enabled.  
   
  4. Разрешил работу nginx на порту TCP 4881 с помощью переключателя setsebool.
-
-   `[root@selinux vagrant]# setsebool -P nis_enabled 1`
+```
+[root@selinux vagrant]# setsebool -P nis_enabled 1
     
-   `[root@selinux vagrant]# systemctl restart nginx`
-    
-    `[root@selinux vagrant]# systemctl status nginx  
+[root@selinux vagrant]# systemctl restart nginx
+```
+```    
+[root@selinux vagrant]# systemctl status nginx
 ● nginx.service - The nginx HTTP and reverse proxy server
    Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
    Active: active (running) since Ср 2023-06-21 07:22:30 UTC; 10s ago
@@ -65,7 +67,7 @@ README с описанием каждого решения (скриншоты �
    CGroup: /system.slice/nginx.service
            ├─9748 nginx: master process /usr/sbin/nginx...
            └─9750 nginx: worker process
-`
+```
 
 6. Проверил статус параметра `getsebool -a | grep nis_enabled`
   `nis_enabled --> on`
