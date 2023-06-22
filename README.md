@@ -135,6 +135,7 @@ Resolving deltas: 100% (140/140), done.
 update failed: SERVFAIL
 ```
 Изменниня внести не получилось. 
+
 7. Используя утилиту audit2why: `cat /var/log/audit/audit.log | audit2why` выяснил, что на клиентске нет ошибок.
 ```
 [vagrant@client ~]$ sudo -i
